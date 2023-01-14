@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { Header } from '../../Components/Header';
 import { ListaVecions } from '../../Components/ListaVecinos';
-
+import { AuthContex } from '../../context/UsuarioContext'
 
 export const Vecinos = () => {
-
+    const { grupos } = useContext(AuthContex)
 
     return (
         <SafeAreaView>
@@ -26,7 +26,7 @@ export const Vecinos = () => {
                 PARA EVITAR FALSAS ALARMAS."
             />
             <ScrollView style={styles.container}>
-                <ListaVecions />
+                <ListaVecions data={grupos[0].usuarios} />
             </ScrollView>
         </SafeAreaView>
     );

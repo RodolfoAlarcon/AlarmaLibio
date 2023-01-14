@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useContext} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -9,13 +9,14 @@ import {
     View,
     Dimensions,
     Image,
+    Alert,
     TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { AuthContex } from '../context/UsuarioContext'
 
 export const ListaConfiguracion = () => {
-
+    const { logOut } = useContext(AuthContex)
     const navigation = useNavigation();
 
     return (
@@ -56,7 +57,9 @@ export const ListaConfiguracion = () => {
                     style={styles.icono}
                 />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.hijo}>
+            <TouchableOpacity style={styles.hijo}
+                onPress={()=>cerrarSesion()}
+            >
                 <Text style={styles.texto}>
                     CERRAR SESIÓN
                 </Text>
@@ -67,6 +70,22 @@ export const ListaConfiguracion = () => {
             </TouchableOpacity>
         </View>
     )
+
+    function cerrarSesion() {
+        Alert.alert("Salir", "Seguro de \n Salir de La Sesion?",
+            [
+                {
+                    text: "Si", onPress: () => {
+                        logOut()
+                        //,goToScreen('LoginScreen')
+                    }
+                },
+                {
+                    text: "No", onPress: () => { }, style: 'cancel'
+                }
+            ]
+        )
+    }
 }
 const styles = StyleSheet.create({
     padre: {

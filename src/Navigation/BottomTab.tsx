@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigationContainer } from "@react-navigation/native"
 import React from "react"
 import { Image } from "react-native";
+import { createStackNavigator } from '@react-navigation/stack';
 import { Configuracion } from "../Views/System/Configuracion/Configuracion";
 import { Historial } from "../Views/System/Historial";
 import { Vecinos } from "../Views/System/Vecinos";
@@ -12,6 +13,7 @@ import ConfiguracionStackScreen from "../Routes/ConfiguracionStack"
 const Tab = createBottomTabNavigator();
 
 export const ButtomTab = () => {
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -32,9 +34,9 @@ export const ButtomTab = () => {
                         case 'VECINOS':
                             icon = focused ? <Image source={require("../Assets/Img/vecinos.png")} style={{ width: 25, height: 25 }} /> : <Image source={require("../Assets/Img/vecinosHover.png")} style={{ width: 25, height: 25 }} />;
                             break;
-                            case 'CAMARAS':
-                                icon = focused ? <Image source={require("../Assets/Img/camaraAmarillo.png")} style={{ width: 25, height: 25 }} /> : <Image source={require("../Assets/Img/camaraHover.png")} style={{ width: 25, height: 25 }} />;
-                                break;
+                        case 'CAMARAS':
+                            icon = focused ? <Image source={require("../Assets/Img/camaraAmarillo.png")} style={{ width: 25, height: 25 }} /> : <Image source={require("../Assets/Img/camaraHover.png")} style={{ width: 25, height: 25 }} />;
+                            break;
                         case 'HISTORIAL':
                             icon = focused ? <Image source={require("../Assets/Img/historial.png")} style={{ width: 25, height: 25 }} /> : <Image source={require("../Assets/Img/historialHover.png")} style={{ width: 25, height: 25 }} />;
                             break;
@@ -68,5 +70,7 @@ export const ButtomTab = () => {
                 component={ConfiguracionStackScreen}
             />
         </Tab.Navigator>
+
     )
+
 }

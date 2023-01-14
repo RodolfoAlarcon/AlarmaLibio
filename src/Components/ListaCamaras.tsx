@@ -35,13 +35,14 @@ const DATA = [
     },
 ];
 
-export const ListaCamaras = () => {
+export const ListaCamaras = (props: any) => {
 
     const _renderItem = (item: any) => {
         return (
             <View>
                 <TouchableOpacity
                     style={styles.container}
+                    key={item.arduino_id}
                 >
                     <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
                         <Image
@@ -49,7 +50,7 @@ export const ListaCamaras = () => {
                             style={{width:40,height:30}}
                         />
                         <Text style={styles.nombre}>
-                            {item.nombre}
+                            {item.arduino_name}
                         </Text>
                     </View>
                     <View style={{height:55, justifyContent:"center"}}>
@@ -68,7 +69,7 @@ export const ListaCamaras = () => {
     return (
         <FlatList
         numColumns={1}
-        data={DATA}
+        data={props.data}
         renderItem={({ item }) => _renderItem(item)}
         keyExtractor={(item: any, index) => index.toString()}
         style={{ width: '100%' }}

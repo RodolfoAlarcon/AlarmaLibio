@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { Header } from '../../Components/Header';
 import { ListaCamaras } from '../../Components/ListaCamaras';
-
-
+import { AuthContex } from '../../context/UsuarioContext'
+ 
 export const Camaras = () => {
-
+    const { grupos } = useContext(AuthContex)
     return(
         <SafeAreaView>
             <Header 
@@ -25,7 +25,7 @@ export const Camaras = () => {
                 PARA EVITAR FALSAS ALARMAS."
             />
             <ScrollView style={styles.container}>
-                <ListaCamaras />
+                <ListaCamaras data={grupos[0].arduinos} />
             </ScrollView>
         </SafeAreaView>
     )

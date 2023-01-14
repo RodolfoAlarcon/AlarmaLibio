@@ -55,11 +55,10 @@ const DATA = [
 ];
 
 
-export const ListaVecions = () => {
-
+export const ListaVecions = (props: any) => {
+    
     const [modal, setModal] = useState(false);
     const [itemModal, setItemModal] = useState(null)
-
 
     const _handleModal = () => {
         let result
@@ -134,7 +133,7 @@ export const ListaVecions = () => {
                     </View>
                     <View style={styles.subcontainer}>
                         <Text style={[styles.nombre, { color: "#606060" }]}>
-                            {item.nombre}
+                            {item.name}
                         </Text>
                         <Text style={styles.descripcion} numberOfLines={1}>
                             {item.ubicacion}
@@ -160,7 +159,7 @@ export const ListaVecions = () => {
         <>
             <FlatList
                 numColumns={1}
-                data={DATA}
+                data={props.data}
                 renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={(item: any, index) => index.toString()}
                 style={{ width: '100%' }}
