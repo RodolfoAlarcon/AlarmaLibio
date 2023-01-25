@@ -55,9 +55,9 @@ export const BottomAlarma = (props: any) => {
     return (
         <TouchableOpacity
             style={styles.boton}
-            onPress={() => navigation.navigate('AlarmaSelecionada', {
+            onPress={() => navigation.navigate('AlarmaSelecionada' as never, {
                 alerta: titulo
-            })}
+            } as never)}
         >
             {
                 handleIcono()

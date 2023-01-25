@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -12,49 +12,60 @@ import {
     TouchableOpacity,
     FlatList
 } from 'react-native';
-
-
-const DATA = [
-    {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        nombre: 'Camara 1',
-        /*fecha: 'ENE 3, 10:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 20',
-        numero: '0993371891',
-        tipoAlarma: 'PERSONAS SOSPECHOSAS'*/
-    },
-    {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        nombre: 'Camara 2',
-        /*fecha: 'ENE 05, 15:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 22',
-        numero: '0993371892',
-        tipoAlarma: 'ALERTA INCENDIO'*/
-    },
-];
+import WS from 'react-native-websocket';
+import { useNavigation } from '@react-navigation/native';
 
 export const ListaCamaras = (props: any) => {
+    const navigation = useNavigation();
+    const [data, setData] = useState([])
 
+
+    const ws = new WebSocket('wss://nodemcumicropython.herokuapp.com/ws/socket-server/') 
+   
+   
+       useEffect(()=>{
+        ws.addEventListener('open', (event) => {
+            console.log('paso')
+            // ws.send("cmd_option: 3");
+            // ws.send(JSON.stringify({cmd_option: '3'})); 
+            /// aqui se esta ejecutando cada vez que se abre una conexion
+            /// "open" es el evento de onOpen, en apertura de conexion
+          });
+    
+          ws.onmessage = (e) => {
+            let dat = JSON.parse(e.data);
+            console.log(dat.canales)
+            setData(dat.canales)
+           }
+
+        //    ws.send(JSON.stringify({
+        //     'message':`cmd 3`,
+        //     'cmd_option':3,
+        //     'type':'message',
+        //     'name': "Nombre",
+        //     'id_key': "KEY PC ! "}))
+       },[])
+ 
     const _renderItem = (item: any) => {
+    
         return (
             <View>
                 <TouchableOpacity
                     style={styles.container}
-                    key={item.arduino_id}
+                    key={item}
+                    onPress={()=>goToScreen('CamaraScreen', item)}
                 >
-                    <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
+                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                         <Image
-                            source={require("../Assets/Img/camaraRojo.png")} 
-                            style={{width:40,height:30}}
+                            source={require("../Assets/Img/camaraRojo.png")}
+                            style={{ width: 40, height: 30 }}
                         />
                         <Text style={styles.nombre}>
-                            {item.arduino_name}
+                            {item}
                         </Text>
                     </View>
-                    <View style={{height:55, justifyContent:"center"}}>
-                        <Image 
+                    <View style={{ height: 55, justifyContent: "center" }}>
+                        <Image
                             source={require("../Assets/Img/flecha.png")}
                             style={styles.icono}
                         />
@@ -67,15 +78,22 @@ export const ListaCamaras = (props: any) => {
 
 
     return (
-        <FlatList
-        numColumns={1}
-        data={props.data}
-        renderItem={({ item }) => _renderItem(item)}
-        keyExtractor={(item: any, index) => index.toString()}
-        style={{ width: '100%' }}
-    />
+        <>
+            <FlatList
+                numColumns={1}
+                data={data}
+                renderItem={({ item }) => _renderItem(item)}
+                keyExtractor={(item: any, index) => index.toString()}
+                style={{ width: '100%' }}
+            />
+        </>
+
     )
+    function goToScreen(routeName:any, anuncio:any) {
+        navigation.navigate(routeName as never, { camara: anuncio } as never)
+    }
 }
+
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
@@ -83,14 +101,14 @@ const styles = StyleSheet.create({
         paddingVertical: 2.5,
         marginHorizontal: "5%",
         marginBottom: 10,
-        justifyContent:"space-between"
+        justifyContent: "space-between"
     },
     icono: {
         width: 30,
         height: 30
     },
-    nombre:{
-        color:"#606060",
-        marginLeft:10
+    nombre: {
+        color: "#606060",
+        marginLeft: 10
     }
 });

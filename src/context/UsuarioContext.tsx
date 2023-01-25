@@ -15,6 +15,7 @@ type AuthContextProps = {
     sing: (data: any, grupos: any, status: any) => void;
     logOut: () => void;
     singin: (data: any) => void;
+    sendAlarmaDescription: (id_user:any,id_group:any, type:any, msg:any)=>void;
 }
 
 const initialSatate: Authstate = {
@@ -66,12 +67,32 @@ const UserProvider = ({ children }: any) => {
 
     }
 
+    const sendAlarmaDescription = async (id_user:any,id_group:any, type:any, msg:any)=>{
+        const array = {
+            id_user:id_user,
+            id_group:id_group,
+            type:type,
+            msg:msg,
+        }
+        try {
+
+            const resp = await apiApp.post('/sendAlarmaDescription', array)
+            console.log(resp)
+            
+            return true;
+        } catch (error) {
+            dispatch({ type: 'addError', payload: error.response.data.message })
+            return false;
+        } 
+    };
+
     return (
         <AuthContex.Provider value={{
             ...login,
             sing,
             logOut,
             singin,
+            sendAlarmaDescription,
 
         }} >
             {children}

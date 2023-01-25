@@ -15,11 +15,11 @@ import {
 } from 'react-native';
 import { Header } from '../../Components/Header';
 import { ListaHistorial } from '../../Components/ListaHistorial';
-import Video from 'react-native-video'
-import ImageStream from '../../Components/ImageStream';
 
-export const Historial = () => {
+export const Historial = (props: any) => {
 
+    const [image, setImage] = useState('');
+    const [uri, setUri] = useState('');
 
     return (
 
@@ -29,13 +29,6 @@ export const Historial = () => {
                 descripcion="EN ESTA LISTA ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADOS CON LA ALARMA."
                 icono="historial"
             />
-           
-            <View style={{ width: 400, height: 400, backgroundColor: 'black' }}>
-                
-                <ImageStream />
-            </View>
-            
-
             <ScrollView style={styles.container}>
                 <ListaHistorial />
             </ScrollView>

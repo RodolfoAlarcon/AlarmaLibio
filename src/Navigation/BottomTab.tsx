@@ -6,9 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Configuracion } from "../Views/System/Configuracion/Configuracion";
 import { Historial } from "../Views/System/Historial";
 import { Vecinos } from "../Views/System/Vecinos";
-import { Camaras } from "../Views/System/Camaras";
 import AlarmaStackScreen from "../Routes/AlarmaStack"
 import ConfiguracionStackScreen from "../Routes/ConfiguracionStack"
+import CamaraStack from "../Routes/CamaraStack"
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +59,7 @@ export const ButtomTab = () => {
             />
             <Tab.Screen
                 name="CAMARAS"
-                component={Camaras}
+                component={CamaraStack}
             />
             <Tab.Screen
                 name="HISTORIAL"

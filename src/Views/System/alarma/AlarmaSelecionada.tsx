@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -16,11 +16,13 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { HeaderSelecion } from '../../../Components/HeaderSelecion';
 import { BottomStopAlarma } from '../../../Components/BottomStopAlarma';
-
+import { AuthContex } from '../../../context/UsuarioContext'
 
 
 
 export const AlarmaSelecionada = () => {
+
+    const { user, grupos, sendAlarmaDescription } = useContext(AuthContex)
 
     const route = useRoute();
     const { alerta } = route.params;
@@ -28,6 +30,25 @@ export const AlarmaSelecionada = () => {
     const [contador, setContador] = useState(60)
     const [breke, setBreke] = useState("Apagado")
     const [text, onChangeText] = useState("");
+
+    const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/socket-server/`)
+    
+    useEffect(() => {
+        ws.onopen = function () {
+            ws.send(JSON.stringify({
+                'message':`cmd 4`,
+                'cmd_option': 4,
+                'type':'message',
+                'name': "Nombre",
+                'id_key': "KEY PC ! "
+            }))
+          }
+        ws.onmessage = (e) => {
+            let dat = JSON.parse(e.data);
+            console.log(dat)
+        }
+
+    }, [])
 
     useEffect(() => {
         if (breke == "Apagado") {
@@ -39,7 +60,7 @@ export const AlarmaSelecionada = () => {
                 }
             }, 1000);
         } else {
-            console.log("se")
+            console.log("se detuvo")
         }
     }, [contador])
 
@@ -91,7 +112,10 @@ export const AlarmaSelecionada = () => {
                     <Text style={styles.tiempo}>{contador} SEGUNDOS</Text>
                     <Text style={styles.tiempoSmall}>PRESIONE LA PLANTALLA SI DESEA PARAR LA ALARMA.</Text>
                 </View>
-                <BottomStopAlarma />
+                <TouchableOpacity onPress={() => { }}>
+                    <BottomStopAlarma />
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.bottom} onPress={() => { setModal(!modal) }}>
                     <Text style={styles.textbottom}>
                         EXPLIQUE LA RAZÓN POR HABER
@@ -99,6 +123,21 @@ export const AlarmaSelecionada = () => {
                     <Text style={styles.textbottom}>
                         ACTIVADO AL ALARMA.
                     </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={async() => {
+                        await ws.send(JSON.stringify({
+                            'message':`cmd 4`,
+                            'cmd_option': 4,
+                            'type':'message',
+                            'name': "Nombre",
+                            'id_key': "KEY PC ! "
+                        }))
+                    }}
+               
+                >
+                    <Text>ON</Text>
                 </TouchableOpacity>
             </View>
             {
@@ -143,16 +182,20 @@ export const AlarmaSelecionada = () => {
                                     </ScrollView>
                                 </View>
                                 <View style={styles.footerModal}>
-                                    <TouchableOpacity style={styles.botonModal} onPressOut={()=>{setModal(false),onChangeText("")}}>
+                                    <TouchableOpacity style={styles.botonModal} onPressOut={() => { setModal(false), onChangeText("") }}>
                                         <Text style={styles.textBotonmodal} >
                                             CANCELAR
                                         </Text>
                                     </TouchableOpacity>
-                                    <View style={styles.botonModal}>
+                                    <TouchableOpacity style={styles.botonModal} onPressOut={async () => {
+                                        await sendAlarmaDescription(user.id, grupos[0].grupo_id, alerta, text);
+                                        setModal(false);
+                                        onChangeText("");
+                                    }}>
                                         <Text style={styles.textBotonmodal}>
                                             ENVIAR
                                         </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -256,23 +299,23 @@ const styles = StyleSheet.create({
         borderColor: "#E30613",
         justifyContent: "flex-start"
     },
-    footerModal:{
-        width:"100%",
-        height:60,
-        flexDirection:"row",
-        justifyContent:"space-around",
-        alignItems:"center",
+    footerModal: {
+        width: "100%",
+        height: 60,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
 
     },
-    botonModal:{
-        backgroundColor:"#E30613",
-        padding:10,
-        borderRadius:5,
-        width:100,
-        justifyContent:"center",
-        alignItems:"center"
+    botonModal: {
+        backgroundColor: "#E30613",
+        padding: 10,
+        borderRadius: 5,
+        width: 100,
+        justifyContent: "center",
+        alignItems: "center"
     },
-    textBotonmodal:{
-        color:"#ffffff"
+    textBotonmodal: {
+        color: "#ffffff"
     }
 });
