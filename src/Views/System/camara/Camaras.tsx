@@ -9,28 +9,32 @@ import {
     View,
     Dimensions
 } from 'react-native';
-import { Header } from '../../Components/Header';
-import { ListaVecions } from '../../Components/ListaVecinos';
-import { AuthContex } from '../../context/UsuarioContext'
-
-export const Vecinos = () => {
-    const { grupos } = useContext(AuthContex)
-
-    return (
+import { Header } from '../../../Components/Header';
+import { ListaCamaras } from '../../../Components/ListaCamaras';
+import { AuthContex } from '../../../context/UsuarioContext'
+ 
+export const Camaras = () => {
+    
+    return(
         <SafeAreaView>
-            <Header
-                titulo="VECINOS"
-                icono="vecinos"
+            <Header 
+                titulo="CAMARA DE VIGILANCIA"
+                icono="CAMARA"
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA
                 Y ESCRIBA UN COMENTARIO A SUS VECINOS 
                 PARA EVITAR FALSAS ALARMAS."
             />
             <ScrollView style={styles.container}>
-                <ListaVecions data={grupos[0].usuarios} />
+                <ListaCamaras />
             </ScrollView>
         </SafeAreaView>
-    );
-};
+    )
+
+
+}
+
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -39,4 +43,3 @@ const styles = StyleSheet.create({
         paddingTop:15
     },
 });
-

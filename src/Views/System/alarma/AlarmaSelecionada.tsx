@@ -11,94 +11,76 @@ import {
     TouchableOpacity,
     Modal,
     Image,
-    TextInput
+    TextInput,
+    BackHandler
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { HeaderSelecion } from '../../../Components/HeaderSelecion';
 import { BottomStopAlarma } from '../../../Components/BottomStopAlarma';
+import { CounterBack } from '../../../Components/CounterBack';
+import { ModalAlarma } from '../../../Components/ModalAlarma';
 import { AuthContex } from '../../../context/UsuarioContext'
-
+import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 
 export const AlarmaSelecionada = () => {
 
     const { user, grupos, sendAlarmaDescription } = useContext(AuthContex)
+    const navigation = useNavigation();
 
     const route = useRoute();
     const { alerta } = route.params;
+    const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/socket-server/`);
+    //const [ws, onWs] = useState(new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/${grupos[0].grupo_id}/`));
+    const [breke, setBreke] = useState(false)
+    const [onAlarm, setOnAlarm] = useState(false)
 
-    const [contador, setContador] = useState(60)
-    const [breke, setBreke] = useState("Apagado")
-    const [text, onChangeText] = useState("");
-
-    const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/socket-server/`)
-    
     useEffect(() => {
-        ws.onopen = function () {
-            ws.send(JSON.stringify({
-                'message':`cmd 4`,
-                'cmd_option': 4,
-                'type':'message',
-                'name': "Nombre",
-                'id_key': "KEY PC ! "
-            }))
-          }
         ws.onmessage = (e) => {
             let dat = JSON.parse(e.data);
             console.log(dat)
         }
-
     }, [])
 
     useEffect(() => {
-        if (breke == "Apagado") {
-            setTimeout(function () {
-                if (contador == 0) {
-                    setBreke("Prendido")
-                } else {
-                    setContador(contador - 1)
-                }
-            }, 1000);
-        } else {
-            console.log("se detuvo")
+        if (onAlarm == true) {
+            ws.onopen = async function () {
+                await ws.send(JSON.stringify({
+                    'message': `cmd 4`,
+                    'cmd_option': 4,
+                    'type': 'message',
+                    'name': "Nombre",
+                    'id_key': "KEY PC ! "
+                }))
+            }
         }
-    }, [contador])
+    }, [onAlarm])
 
-    const [modal, setModal] = useState(false);
+    BackHandler.addEventListener('hardwareBackPress', function () {
+        closeWS()
+    });
+    const isFocused = useIsFocused();
 
-    const [textarea, setTextarea] = useState("")
+    if (!isFocused) {
+        closeWS()
+    }
 
+    async function closeWS() {
+        await ws.close();
+    }
 
-    const _renderImagenHover = () => {
-        if (alerta == "PERSONAS SOSPECHOSAS") {
-            return (
-                <Image
-                    source={require("../../../Assets/Img/sospechosoHover.png")}
-                    style={styles.icono}
-                />
-            )
-        } else if (alerta == "ALERTA INCENDIO") {
-            return (
-                <Image
-                    source={require("../../../Assets/Img/incendioHover.png")}
-                    style={styles.icono}
-                />
-            )
-        } else if (alerta == "ROBO O ASALTO") {
-            return (
-                <Image
-                    source={require("../../../Assets/Img/roboHover.png")}
-                    style={styles.icono}
-                />
-            )
-        } else if (alerta == "ALERTA MÉDICA") {
-            return (
-                <Image
-                    source={require("../../../Assets/Img/medicaHover.png")}
-                    style={styles.icono}
-                />
-            )
-        }
+    async function stopAlm() {
+       
+            await ws.send(JSON.stringify({
+                'message': `cmd 0`,
+                'cmd_option': 0,
+                'type': 'message',
+                'name': "Nombre",
+                'id_key': "KEY PC ! "
+            }))
+       
+       
     }
 
     return (
@@ -108,103 +90,23 @@ export const AlarmaSelecionada = () => {
                 icono={alerta}
             />
             <View style={styles.container}>
-                <View>
-                    <Text style={styles.tiempo}>{contador} SEGUNDOS</Text>
-                    <Text style={styles.tiempoSmall}>PRESIONE LA PLANTALLA SI DESEA PARAR LA ALARMA.</Text>
-                </View>
-                <TouchableOpacity onPress={() => { }}>
+
+
+                <CounterBack styleT={styles.tiempo} styleTs={styles.tiempoSmall} breke={breke} setBreke={setBreke} stopAlm={stopAlm} />
+
+
+                <TouchableOpacity onPress={() => {stopAlm()}}>
                     <BottomStopAlarma />
                 </TouchableOpacity>
+                <ModalAlarma alerta={alerta} setOnAlarm={setOnAlarm}/>
 
-                <TouchableOpacity style={styles.bottom} onPress={() => { setModal(!modal) }}>
-                    <Text style={styles.textbottom}>
-                        EXPLIQUE LA RAZÓN POR HABER
-                    </Text>
-                    <Text style={styles.textbottom}>
-                        ACTIVADO AL ALARMA.
-                    </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={async() => {
-                        await ws.send(JSON.stringify({
-                            'message':`cmd 4`,
-                            'cmd_option': 4,
-                            'type':'message',
-                            'name': "Nombre",
-                            'id_key': "KEY PC ! "
-                        }))
-                    }}
-               
-                >
-                    <Text>ON</Text>
-                </TouchableOpacity>
             </View>
-            {
-                modal == true ?
-                    <Modal
-                        animationType="slide"
-                        transparent
-                        visible={true}
-                    >
-                        <View style={styles.modal}>
-                            <View style={styles.modalHijo}>
-                                <View style={styles.headerModal}>
-                                    {
-                                        _renderImagenHover()
-                                    }
-                                    <View style={styles.subcontainer}>
-                                        <Text style={styles.nombreModal}>
-                                            {alerta}
-                                        </Text>
-                                    </View>
-                                    <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-                                        <Text style={styles.nombreModal}>
-                                            10:00PM
-                                        </Text>
-                                        <Text style={styles.nombreModal}>
-                                            June 12, 2023
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.subHeaderModal}>
-                                    <Text numberOfLines={1} style={styles.textSubHeaderModal}>LA RAZÓN PORQUE ACTIVE LA ALARMA ES LA SIGUIENTE:</Text>
-                                </View>
-                                <View style={styles.contenidoModal}>
-                                    <ScrollView>
-                                        <TextInput
-                                            multiline={true}
-                                            numberOfLines={5}
-                                            onChangeText={onChangeText}
-                                            value={text}
-                                            style={styles.input}
-                                        />
-                                    </ScrollView>
-                                </View>
-                                <View style={styles.footerModal}>
-                                    <TouchableOpacity style={styles.botonModal} onPressOut={() => { setModal(false), onChangeText("") }}>
-                                        <Text style={styles.textBotonmodal} >
-                                            CANCELAR
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.botonModal} onPressOut={async () => {
-                                        await sendAlarmaDescription(user.id, grupos[0].grupo_id, alerta, text);
-                                        setModal(false);
-                                        onChangeText("");
-                                    }}>
-                                        <Text style={styles.textBotonmodal}>
-                                            ENVIAR
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
-                    :
-                    <></>
-            }
+
         </SafeAreaView>
     )
+    function goToBackScreen() {
+        navigation.goBack()
+    }
 
 }
 

@@ -31,7 +31,7 @@ export const Alarmas = () => {
                         <View style={styles.bottom}>
                             <BottomAlarma 
                                 icono="sospechoso"
-                                titulo="PERSONA SOSPECHOSAS"
+                                titulo="PERSONAS SOSPECHOSAS"
                             />
                         </View>
                         <View style={styles.bottom}>
@@ -45,7 +45,7 @@ export const Alarmas = () => {
                         <View style={styles.bottom}>
                             <BottomAlarma 
                                 icono="medica"
-                                titulo="ALERTA MÉDICA"
+                                titulo="ALERTA MEDICA"
                             />
                         </View>
                         <View style={styles.bottom}>

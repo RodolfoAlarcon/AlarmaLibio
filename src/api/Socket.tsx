@@ -1,7 +1,5 @@
-import { io } from 'socket.io-client';
 
-const baseUrl = `https://vecinovendechat.herokuapp.com`;
-const socket = io(baseUrl, { transports: ['websocket'], forceNew: true })
+const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/socket-server/`)
 
 
-export default socket;
+export default ws;

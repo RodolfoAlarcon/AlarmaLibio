@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -9,32 +9,29 @@ import {
     View,
     Dimensions
 } from 'react-native';
-import { Header } from '../../Components/Header';
-import { ListaCamaras } from '../../Components/ListaCamaras';
-import { AuthContex } from '../../context/UsuarioContext'
- 
-export const Camaras = () => {
-    const { grupos } = useContext(AuthContex)
-    return(
+import { Header } from '../../../Components/Header';
+import { ListaGrupos } from '../../../Components/ListaGrupos';
+import { AuthContex } from '../../../context/UsuarioContext'
+import apiApp from '../../../api/api'
+
+export const GruposScreen = () => {
+    const { user, grupos } = useContext(AuthContex)
+    
+    return (
         <SafeAreaView>
-            <Header 
-                titulo="CAMARA DE VIGILANCIA"
-                icono="CAMARA"
+            <Header
+                titulo="GRUPOS"
+                icono="vecinos"
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA
                 Y ESCRIBA UN COMENTARIO A SUS VECINOS 
                 PARA EVITAR FALSAS ALARMAS."
             />
             <ScrollView style={styles.container}>
-                <ListaCamaras data={grupos[0].arduinos} />
+                <ListaGrupos data={grupos} />
             </ScrollView>
         </SafeAreaView>
-    )
-
-
-}
-
-
-
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -43,3 +40,4 @@ const styles = StyleSheet.create({
         paddingTop:15
     },
 });
+

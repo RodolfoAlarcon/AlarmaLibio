@@ -52,7 +52,15 @@ const handleIcono = () =>{
                 style={styles.icono}
             />
         )
+    }else if(icono == "DENUNCIA"){
+        return(
+            <Image 
+                source={require("../Assets/Img/vecinosHover.png")}
+                style={styles.icono}
+            />
+        )
     }
+
 }
 
 

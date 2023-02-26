@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -13,53 +13,15 @@ import {
     FlatList,
     Modal
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { AuthContex } from '../context/UsuarioContext'
 
-
-const DATA = [
-    {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        nombre: 'Carlos Perez',
-        fecha: 'ENE 3, 10:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 20',
-        numero: '0993371891',
-        tipoAlarma: 'PERSONAS SOSPECHOSAS'
-    },
-    {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        nombre: 'Mario Rodriguez',
-        fecha: 'ENE 05, 15:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 22',
-        numero: '0993371892',
-        tipoAlarma: 'ALERTA INCENDIO'
-    },
-    {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        nombre: 'Sandra Castillo',
-        fecha: 'ENE 03, 05:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 23',
-        numero: '0993371893',
-        tipoAlarma: 'ROBO O ASALTO'
-    },
-    {
-        id: '58694a0f-3da1-471f-bd96-145571e29d54',
-        nombre: 'Mario Ortiz',
-        fecha: 'ENE 01, 10:30',
-        descripcion: 'Hay un carro estacionado fuera de mi casa, no conozco a las personas que están dentro, por favor vecinos si alguien los conoce, comuníquelo',
-        ubicacion: 'Alborada 2da etp. Mz. 34 Villa 24',
-        numero: '0993371894',
-        tipoAlarma: 'ALERTA MEDICA'
-    },
-];
-
-
-
-export const ListaHistorial = () => {
+export const ListaHistorial = (props: any) => {
 
     const [modal, setModal] = useState(false);
-    const [itemModal, setItemModal] = useState(null)
+    const [itemModal, setItemModal] = useState([])
+    const navigation = useNavigation();
+    const { user } = useContext(AuthContex)
 
     const _renderImagen = (item: any) => {
         if (item == "PERSONAS SOSPECHOSAS") {
@@ -124,32 +86,31 @@ export const ListaHistorial = () => {
         }
     }
     const _handleModal = () => {
-        let result
-        result = DATA.filter(e => e.id == itemModal)
+
         return (
             <View style={styles.modalHijo}>
                 <View style={styles.headerModal}>
                     <View>
                         {
-                            _renderImagenHover(result[0].tipoAlarma)
+                            _renderImagenHover(itemModal.alarm_type)
                         }
                     </View>
                     <View style={styles.subcontainer}>
                         <Text style={styles.nombreModal}>
-                            {result[0].nombre}
+                            {itemModal.name} {itemModal.apellido}
                         </Text>
                         <Text style={styles.razonModal} numberOfLines={1}>
-                            {result[0].tipoAlarma}
+                            {itemModal.alarm_type}
                         </Text>
                     </View>
                     <View style={{ justifyContent: "flex-end" }}>
                         <Text style={styles.fechaModal}>
-                            {result[0].fecha}
+                            {itemModal.alarm_date}
                         </Text>
                     </View>
                     <TouchableOpacity
                         style={{ justifyContent: "center", paddingLeft: 10 }}
-                        onPress={() => { setModal(false), setItemModal(null) }}
+                        onPress={() => { setModal(false), setItemModal([]) }}
                     >
                         <Image
                             source={require("../Assets/Img/salir.png")}
@@ -160,7 +121,7 @@ export const ListaHistorial = () => {
                 <View style={styles.contenidoModal}>
                     <ScrollView>
                         <Text style={styles.descripcionModal}>
-                            {result[0].descripcion}
+                            {itemModal.alarm_menssage}
                         </Text>
                         <View style={{ flexDirection: "row", marginTop: 10, alignItems: "flex-end" }}>
                             <Image
@@ -168,7 +129,7 @@ export const ListaHistorial = () => {
                                 style={{ width: 20, height: 20, }}
                             />
                             <Text style={[styles.descripcionModal, { marginLeft: 5 }]} numberOfLines={1}>
-                                {result[0].ubicacion}
+                                { }
                             </Text>
                         </View>
                         <View style={{ flexDirection: "row", marginTop: 10, alignItems: "flex-end" }}>
@@ -177,46 +138,56 @@ export const ListaHistorial = () => {
                                 style={{ width: 20, height: 20, }}
                             />
                             <Text style={[styles.descripcionModal, { marginLeft: 5 }]} numberOfLines={1}>
-                                {result[0].numero}
+                                {itemModal.phone}
                             </Text>
                         </View>
                     </ScrollView>
                 </View>
                 <View style={styles.footerModal}>
-                    <View style={styles.botonModal}>
-                        <Text style={styles.textBotonmodal}>
-                            DENUNCIAR
+                    {itemModal.users_id !== user.id ?
+                        <TouchableOpacity onPress={() => { setModal(false), setItemModal([]), goToScreen('DenunciasScreen', itemModal.users_id) }}>
+                            <View style={styles.botonModal}>
+                                <Text style={styles.textBotonmodal}>
+                                    DENUNCIAR
                         </Text>
-                    </View>
+                            </View>
+                        </TouchableOpacity>
+                        : <></>
+                    }
+
                 </View>
             </View>
         )
+
+        function goToScreen(routeName: any, id: any) {
+            navigation.navigate(routeName as never, { id: id } as never)
+        }
     }
 
     const _renderItem = (item: any) => {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={() => { setModal(true), setItemModal(item.id) }}
+                    onPress={() => { setModal(true), setItemModal(item) }}
                     style={styles.container}
                 >
                     <View>
                         {
-                            _renderImagen(item.tipoAlarma)
+                            _renderImagen(item.alarm_type)
                         }
                     </View>
                     <View style={styles.subcontainer}>
                         <Text style={[styles.nombre, { color: "#606060" }]}>
-                            {item.nombre}
+                            {item.name} {item.apellido}
                         </Text>
                         <Text style={styles.descripcion} numberOfLines={1}>
-                            {item.descripcion}
+                            {item.alarm_menssage}
                         </Text>
                     </View>
                     <View style={styles.cajafecha}>
                         <View style={styles.fecha}>
                             <Text style={styles.fechatexto}>
-                                {item.fecha}
+                                {item.alarm_date}
                             </Text>
                         </View>
                     </View>
@@ -229,7 +200,7 @@ export const ListaHistorial = () => {
         <>
             <FlatList
                 numColumns={1}
-                data={DATA}
+                data={props.data}
                 renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={(item: any, index) => index.toString()}
                 style={{ width: '100%' }}
@@ -252,11 +223,7 @@ export const ListaHistorial = () => {
             }
         </>
     )
-
-
 }
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -334,23 +301,23 @@ const styles = StyleSheet.create({
         textAlign: "justify",
         fontWeight: "500"
     },
-    footerModal:{
-        width:"100%",
-        height:60,
-        flexDirection:"row",
-        justifyContent:"space-around",
-        alignItems:"center",
+    footerModal: {
+        width: "100%",
+        height: 60,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
 
     },
-    botonModal:{
-        backgroundColor:"#E30613",
-        padding:10,
-        borderRadius:5,
-        width:100,
-        justifyContent:"center",
-        alignItems:"center"
+    botonModal: {
+        backgroundColor: "#E30613",
+        padding: 10,
+        borderRadius: 5,
+        width: 100,
+        justifyContent: "center",
+        alignItems: "center"
     },
-    textBotonmodal:{
-        color:"#ffffff"
+    textBotonmodal: {
+        color: "#ffffff"
     }
 });

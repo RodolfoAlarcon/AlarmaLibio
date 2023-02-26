@@ -17,6 +17,7 @@ export interface Authstate {
 export type AuthAction =
     | { type: 'sing-in', payload: { user: User, status: string, grupos: Grupos[] } }
     | { type: 'login', payload: { access_token: string, user: User, grupos: Grupos[] } }
+    | { type: 'editPerfil', payload: { user: User } }
     | { type: 'sing-out', payload: { access_token: null, user: null, grupos:null } }
     | { type: 'addError', payload: string }
 
@@ -40,9 +41,7 @@ export const userReducer = (state: Authstate, action: AuthAction): Authstate => 
 
         case 'login':
 
-      
             action.payload.user["access_token"] = action.payload.access_token;
-
 
             saveUsuario(action.payload.user).then((msg) => {
                 console.log('user save')
@@ -58,6 +57,25 @@ export const userReducer = (state: Authstate, action: AuthAction): Authstate => 
                 status: 'authenticated',
                 access_token: action.payload.access_token,
             }
+
+            case 'editPerfil':
+                state.user.name = action.payload.user.name,
+                state.user.apellido = action.payload.user.apellido,
+                state.user.phone =  action.payload.user.phone,
+                state.user.provincia_id = action.payload.user.provincia_id,
+                state.user.ciudad_id = action.payload.user.ciudad_id,
+                state.user.sector_id = action.payload.user.sector_id
+  
+       
+                saveUsuario(state.user).then((msg) => {
+                    console.log('address save')
+                })
+    
+                return {
+                    ...state,
+                    user: state.user,
+    
+                } 
             case 'sing-out':
 
             deleteUsuario().then((msg) => {

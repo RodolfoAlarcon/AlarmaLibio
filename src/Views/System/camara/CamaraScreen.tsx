@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { BackHandler } from "react-native";
 import {
     SafeAreaView,
     ScrollView,
@@ -12,12 +11,15 @@ import {
     Dimensions,
     Button,
     ImageBackground,
-    TouchableOpacity
+    TouchableOpacity,
+    BackHandler
 
 } from 'react-native';
 import { Header } from '../../../Components/Header';
 import { ListaHistorial } from '../../../Components/ListaHistorial';
 import { NoFlickerImage } from 'react-native-no-flicker-image';
+import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 export const CamaraScreen = (props: any) => {
 
@@ -27,13 +29,27 @@ export const CamaraScreen = (props: any) => {
 
     const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/${params.camara}/`)
 
-    ws.onmessage = (e) => {
-        let dat = JSON.parse(e.data);
-        console.log(dat.message)
-        if (dat.message.length > 200) {
-            setUri({ uri: `data:image/jpeg;base64,${dat.message}` })
+    useEffect(() => {
+        ws.onmessage = (e) => {
+            let dat = JSON.parse(e.data);
+            if (dat.message.length > 200) {
+                setUri({ uri: `data:image/jpeg;base64,${dat.message}` })
+            }
         }
+    }, [])
+
+
+    BackHandler.addEventListener('hardwareBackPress', function () {
+        closeWS()
+    });
+    const isFocused = useIsFocused();
+    if (!isFocused) {
+        closeWS()
     }
+    function closeWS() {
+        ws.close();
+    }
+    console.log(isFocused)
     return (
         <ScrollView>
             <SafeAreaView>
@@ -53,26 +69,34 @@ export const CamaraScreen = (props: any) => {
 
                 </View>
 
-                <TouchableOpacity
-                    onPress={() => {
-                        ws.send(JSON.stringify({
-                            'cmd_option': 3
+                {/*<TouchableOpacity
+                    onPress={async () => {
+                        await ws.send(JSON.stringify({
+                            'message': `cmd 4`,
+                            'cmd_option': 3,
+                            'type': 'message',
+                            'name': "Nombre",
+                            'id_key': "KEY PC ! "
                         }))
                     }}
-               
+
                 >
                     <Text>Camara</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => {
-                        ws.send(JSON.stringify({
-                            'cmd_option': 0
+                    onPress={async () => {
+                        await ws.send(JSON.stringify({
+                            'message': `cmd 4`,
+                            'cmd_option': 0,
+                            'type': 'message',
+                            'name': "Nombre",
+                            'id_key': "KEY PC ! "
                         }))
                     }}
-                
+
                 >
                     <Text>Detener</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
             </SafeAreaView>
         </ScrollView>
     )

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect }  from "react";
 import {
     SafeAreaView,
     ScrollView,
@@ -12,9 +12,13 @@ import {
 } from 'react-native';
 import { Header } from '../../../Components/Header';
 import { Input } from "../../../Components/Input";
-
+import { AuthContex } from '../../../context/UsuarioContext'
+import { Formik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
 
 export const CambiarPassword = () => {
+    const navigator = useNavigation()
+    const { user, editPassword } = useContext(AuthContex)
 
     return (
         <SafeAreaView>
@@ -24,39 +28,86 @@ export const CambiarPassword = () => {
                 descripcion="EN ESTA LISTA SE ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADAS CON LA ALARMA."
             />
             <ScrollView style={styles.container}>
-                <Text style={styles.texto}>
-                    Contraseña Actual:
+
+                <Formik
+                    initialValues={{
+                        id: user.id,
+                        access_token: user.access_token,
+                        oldPassword: '',
+                        newPassword: '',
+                        newPasswordRepeat: ''
+                    }}
+                    onSubmit={async (values: any) => {
+                        if(values.newPassword == values.newPasswordRepeat){
+                            const res = await editPassword(values)
+                            if (res == true) {
+
+                                await goToBackScreen();
+    
+                            }
+                        }else{
+                            alert('contraseñas no coinciden')
+                        }
+                    }}
+                >
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        handleFileUpload,
+                        errors,
+                        touched,
+                        isValid,
+                    }: any) => (
+                        <>
+                            <Text style={styles.texto}>
+                                Contraseña Actual:
                 </Text>
-                <Input
-                    keyboardType="password"
-                    placeholder="******"
-                    password="true"
-                />
-                <Text style={styles.texto}>
-                    Nueva Contraseña:
+                            <Input
+                                keyboardType="password"
+                                placeholder={"Contraseña Actual"}
+                                value={values.oldPassword}
+                                onChangeText={handleChange('oldPassword')}
+                                onBlur={handleBlur('oldPassword')}
+                                password={true}
+                            />
+                            <Text style={styles.texto}>
+                                Nueva Contraseña:
                 </Text>
-                <Input
-                    keyboardType="password"
-                    placeholder="******"
-                    password="true"
-                />
-                <Text style={styles.texto}>
-                    Repetir Contraseña Nueva:
+                            <Input
+                                keyboardType="password"
+                                placeholder={"Nueva Contraseña"}
+                                value={values.newPassword}
+                                onChangeText={handleChange('newPassword')}
+                                onBlur={handleBlur('newPassword')}
+                                password={true}
+                            />
+                            <Text style={styles.texto}>
+                                Repetir Contraseña Nueva:
                 </Text>
-                <Input
-                    keyboardType="password"
-                    placeholder="******"
-                    password="true"
-                />
-                <TouchableOpacity style={styles.Boton}>
-                    <Text style={styles.textoboton}>
-                        ENVIAR
+                            <Input
+                                keyboardType="password"
+                                placeholder={"Repetir Contraseña Nueva"}
+                                value={values.newPasswordRepeat}
+                                onChangeText={handleChange('newPasswordRepeat')}
+                                onBlur={handleBlur('newPasswordRepeat')}
+                                password={true}
+                            />
+                            <TouchableOpacity style={styles.Boton} onPress={() => handleSubmit()}>
+                                <Text style={styles.textoboton}>
+                                    ENVIAR
                     </Text>
-                </TouchableOpacity>
+                            </TouchableOpacity>
+                        </>
+                    )}
+                </Formik>
             </ScrollView>
         </SafeAreaView>
     )
-
+    function goToBackScreen() {
+        navigator.goBack()
+    }
 }
 
 

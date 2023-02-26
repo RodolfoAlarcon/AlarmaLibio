@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CamaraScreen } from "../Views/System/camara/CamaraScreen";
-import { Camaras } from "../Views/System/Camaras";
+import { Camaras } from "../Views/System/camara/Camaras";
 
 const CamaraStackScreen = () => {
 

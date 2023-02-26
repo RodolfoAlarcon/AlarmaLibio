@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -13,23 +13,26 @@ import {
     FlatList,
     Modal
 } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import { AuthContex } from '../context/UsuarioContext'
 
 
 export const ListaVecions = (props: any) => {
-    
+
     const [modal, setModal] = useState(false);
-    const [itemModal, setItemModal] = useState(null)
+    const [itemModal, setItemModal] = useState([])
+    const navigation = useNavigation();
+    const { user } = useContext(AuthContex)
 
     const _handleModal = () => {
         let result
-        result = props.data.filter((e:any) => e.id == itemModal)
+        result = props.data.filter((e: any) => e.id == itemModal)
         console.log(result)
         return (
             <View style={styles.modalHijo}>
                 <View style={styles.headerModal}>
                     <View>
-                    <Image
+                        <Image
                             source={require("../Assets/Img/perfil.jpg")}
                             style={{ width: 45, height: 45, borderRadius: 100 }}
                         />
@@ -41,7 +44,7 @@ export const ListaVecions = (props: any) => {
                     </View>
                     <TouchableOpacity
                         style={{ justifyContent: "center", paddingLeft: 10 }}
-                        onPress={() => { setModal(false), setItemModal(null) }}
+                        onPress={() => { setModal(false), setItemModal([]) }}
                     >
                         <Image
                             source={require("../Assets/Img/salir.png")}
@@ -71,15 +74,25 @@ export const ListaVecions = (props: any) => {
                         </View>
                     </ScrollView>
                 </View>
+                {}
                 <View style={styles.footerModal}>
-                    <View style={styles.botonModal}>
-                        <Text style={styles.textBotonmodal}>
-                            DENUNCIAR
+                    {result[0].id !== user.id ?
+                        <TouchableOpacity onPress={() => { setModal(false), setItemModal([]), goToScreen('DenunciasScreen', result[0].id) }}>
+                            <View style={styles.botonModal}>
+                                <Text style={styles.textBotonmodal}>
+                                    DENUNCIAR
                         </Text>
-                    </View>
+                            </View>
+                        </TouchableOpacity>
+                        : <></>
+                    }
                 </View>
             </View>
         )
+
+        function goToScreen(routeName: any, id: any) {
+            navigation.navigate(routeName as never, { id: id } as never)
+        }
     }
 
 
@@ -206,7 +219,7 @@ const styles = StyleSheet.create({
     nombreModal: {
         fontWeight: "bold",
         color: "#ffffff",
-        fontSize:20
+        fontSize: 20
     },
     razonModal: {
         color: "#606060"

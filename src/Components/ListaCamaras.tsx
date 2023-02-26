@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -10,42 +10,45 @@ import {
     Dimensions,
     Image,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    BackHandler
 } from 'react-native';
 import WS from 'react-native-websocket';
 import { useNavigation } from '@react-navigation/native';
-
+import { useIsFocused } from '@react-navigation/native';
+import { AuthContex } from '../context/UsuarioContext'
+ 
 export const ListaCamaras = (props: any) => {
+
+    const { user, grupos, sendAlarmaDescription } = useContext(AuthContex)
     const navigation = useNavigation();
     const [data, setData] = useState([])
 
 
-    const ws = new WebSocket('wss://nodemcumicropython.herokuapp.com/ws/socket-server/') 
+    const ws = new WebSocket(`wss://nodemcumicropython.herokuapp.com/ws/${grupos[0].grupo_id}/`) 
    
    
        useEffect(()=>{
-        ws.addEventListener('open', (event) => {
-            console.log('paso')
-            // ws.send("cmd_option: 3");
-            // ws.send(JSON.stringify({cmd_option: '3'})); 
-            /// aqui se esta ejecutando cada vez que se abre una conexion
-            /// "open" es el evento de onOpen, en apertura de conexion
-          });
-    
+          
           ws.onmessage = (e) => {
             let dat = JSON.parse(e.data);
             console.log(dat.canales)
             setData(dat.canales)
            }
 
-        //    ws.send(JSON.stringify({
-        //     'message':`cmd 3`,
-        //     'cmd_option':3,
-        //     'type':'message',
-        //     'name': "Nombre",
-        //     'id_key': "KEY PC ! "}))
        },[])
- 
+
+       BackHandler.addEventListener('hardwareBackPress', function () {
+        closeWS()
+        });
+        const isFocused = useIsFocused();
+        if (!isFocused){
+            closeWS()
+        }
+        function closeWS(){
+            ws.close();
+        }
+        console.log(isFocused)
     const _renderItem = (item: any) => {
     
         return (
@@ -74,8 +77,6 @@ export const ListaCamaras = (props: any) => {
             </View>
         )
     }
-
-
 
     return (
         <>
