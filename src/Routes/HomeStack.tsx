@@ -9,6 +9,7 @@ import { EnviarCorreo } from "../Views/EnviarCorreo";
 import { CodigoVerificacion } from '../Views/CodigoVerificacion';
 import { ResetPassword } from "../Views/ResetPassword";
 import { AuthContex } from '../context/UsuarioContext'
+import OneSignal from 'react-native-onesignal';
 
 
 export function HomeStack() {
@@ -23,8 +24,11 @@ export function HomeStack() {
     async function fetchSession(statusl: any) {
         let responseUser = await getUsuario();
         let responseGrupos = await getGrupos();
-    
+        
         if (responseUser !== null) {
+            
+            OneSignal.setExternalUserId(responseUser['id']);
+            await OneSignal.promptForPushNotificationsWithUserResponse(response => { });
             statusl = 'authenticated';
         }
         sing(responseUser, responseGrupos, statusl)
