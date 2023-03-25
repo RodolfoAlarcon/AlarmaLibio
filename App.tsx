@@ -1,5 +1,7 @@
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import OneSignal from 'react-native-onesignal';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -23,7 +25,16 @@ export const AppState = ({ children }: { children: JSX.Element | JSX.Element[] }
 }
 
 const App = () => {
+  useEffect(()=>{
+    OneSignal.setLogLevel(6, 0);
+ 
+    OneSignal.setAppId("2b79ca5b-7087-42ce-885f-0bd54f480d13");
+    OneSignal.setLanguage('es')
 
+    OneSignal.promptForPushNotificationsWithUserResponse(response => {
+      console.log("Prompt response:", response);
+    });
+  },[])
   return (
     <NavigationContainer>
       <AppState>
