@@ -17,6 +17,7 @@ import { AuthContex } from '../../../context/UsuarioContext'
 import MultiSelect from 'react-native-multiple-select';
 import { useNavigation } from '@react-navigation/native';
 import apiApp from '../../../api/api'
+import Icon from "react-native-vector-icons/FontAwesome"
 
 export const EditarPerfil = () => {
     const navigator = useNavigation()

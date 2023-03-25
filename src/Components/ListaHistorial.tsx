@@ -23,6 +23,9 @@ export const ListaHistorial = (props: any) => {
     const navigation = useNavigation();
     const { user } = useContext(AuthContex)
 
+    const lista = props.data.reverse()
+
+
     const _renderImagen = (item: any) => {
         if (item == "PERSONAS SOSPECHOSAS") {
             return (
@@ -200,7 +203,7 @@ export const ListaHistorial = (props: any) => {
         <>
             <FlatList
                 numColumns={1}
-                data={props.data}
+                data={lista}
                 renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={(item: any, index) => index.toString()}
                 style={{ width: '100%' }}

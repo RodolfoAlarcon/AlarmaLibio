@@ -245,7 +245,8 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         borderColor: "#E30613",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
+        color:"#000000"
     },
     footerModal: {
         width: "100%",

@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
         justifyContent:"space-between",
         alignItems:"center",
         paddingTop:30,
-        paddingBottom:50
+        paddingBottom:60
     },
     titulo:{
-        fontSize:40,
+        fontSize:35,
         color:"#FFFF00",
         fontWeight:"bold"
     },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         textAlign:"center"
     },
     icono:{
-        width:100,
-        height:100
+        width:80,
+        height:80
     }
 });

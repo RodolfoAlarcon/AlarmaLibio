@@ -6,55 +6,34 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    TouchableOpacity
 } from 'react-native';
+import Icon from "react-native-vector-icons/FontAwesome"
+import { useNavigation } from '@react-navigation/native';
+
 
 export const HeaderSelecion = (props: any) => {
+
+
+    const navigation = useNavigation();
 
     const titulo = props.titulo
     const icono = props.icono
 
-    const handleIcono = () => {
-        if (icono == "PERSONA SOSPECHOSAS") {
-            return (
-                <Image
-                    source={require("../Assets/Img/sospechosoAmarillo.png")}
-                    style={styles.icono}
-                />
-            )
-        } else if (icono == "ROBO O ASALTO") {
-            return (
-                <Image
-                    source={require("../Assets/Img/roboAmarillo.png")}
-                    style={styles.icono}
-                />
-            )
-        } else if (icono == "ALERTA MÉDICA") {
-            return (
-                <Image
-                    source={require("../Assets/Img/medicaAmarilla.png")}
-                    style={styles.icono}
-                />
-            )
-        }
-        else if (icono == "ALERTA INCENDIO") {
-            return (
-                <Image
-                    source={require("../Assets/Img/incendioAmarillo.png")}
-                    style={styles.icono}
-                />
-            )
-        }
-    }
+
+    
 
     return (
         <View style={styles.container}>
-                {
-                    handleIcono()
-                }
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Alarmas' as never)}
+                >
+                    <Icon name="arrow-left" size={20} color="#fff" />
+                </TouchableOpacity>
                 <Text style={styles.titulo}>
-                    {titulo}
+                    {titulo} 
                 </Text>
+                <View></View>
         </View>
     )
 
@@ -66,8 +45,9 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "#E4003A",
         flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center"
+        justifyContent:"space-between",
+        alignItems:"center",
+        paddingHorizontal:10
     },
     titulo: {
         fontSize: 25,
