@@ -48,6 +48,7 @@ export const VecinosScreen = (props:any) => {
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA
                 Y ESCRIBA UN COMENTARIO A SUS VECINOS 
                 PARA EVITAR FALSAS ALARMAS."
+                retroceder={true}
             />
             <ScrollView style={styles.container}>
                 <ListaVecions data={vecinos} />

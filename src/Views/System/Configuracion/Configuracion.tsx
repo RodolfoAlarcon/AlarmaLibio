@@ -22,6 +22,7 @@ export const Configuracion = () => {
                 titulo="CONFIGURACIÓN"
                 icono="configuracion"
                 descripcion="EN ESTA LISTA SE ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADAS CON LA ALARMA."
+                retroceder={true}
             />
             <ScrollView>
                 <ListaConfiguracion />

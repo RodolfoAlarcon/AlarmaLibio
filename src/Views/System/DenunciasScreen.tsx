@@ -29,6 +29,7 @@ export const DenunciasScreen = (props: any) => {
                 titulo="Denuncia"
                 descripcion="SI DESEAS REPORTAR A UN USUARIO POR USO INDEVIDO DEL SERVICIO"
                 icono="DENUNCIA"
+                retroceder={true}
             />
             <ScrollView style={styles.container}>
                 <Formik

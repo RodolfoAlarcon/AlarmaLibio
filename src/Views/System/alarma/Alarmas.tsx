@@ -24,6 +24,7 @@ export const Alarmas = () => {
                 titulo="ALARMA"
                 icono="alarma"
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA Y ESCRIBA UN COMENTARIO A SUS VECINOS PARA EVITAR FALSAS ALARMAS."
+                retroceder={false}
             />
             <ScrollView>
                 <View style={styles.container}>

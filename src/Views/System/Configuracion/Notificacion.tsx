@@ -27,6 +27,7 @@ export const Notificacion = () => {
                 titulo="CONFIGURACIÓN"
                 icono="configuracion"
                 descripcion="EN ESTA LISTA SE ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADAS CON LA ALARMA."
+                retroceder={true}
             />
             <ScrollView style={styles.container}>
                 <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>

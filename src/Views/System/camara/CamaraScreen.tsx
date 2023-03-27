@@ -56,7 +56,7 @@ export const CamaraScreen = (props: any) => {
                 <Header
                     titulo="Camara"
                     descripcion="EN ESTA LISTA ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADOS CON LA ALARMA."
-
+                    retroceder={true}
                 />
 
                 <View style={{ width: 400, height: 400, backgroundColor: 'black' }}>

@@ -59,6 +59,7 @@ export const Historial = (props: any) => {
                 titulo="HISTORIAL"
                 descripcion="EN ESTA LISTA ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADOS CON LA ALARMA."
                 icono="historial"
+                retroceder={true}
             />
             <ScrollView style={styles.container}>
                 <ListaHistorial data={historial}/>

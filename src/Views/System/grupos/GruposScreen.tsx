@@ -25,6 +25,7 @@ export const GruposScreen = () => {
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA
                 Y ESCRIBA UN COMENTARIO A SUS VECINOS 
                 PARA EVITAR FALSAS ALARMAS."
+                retroceder={true}
             />
             <ScrollView style={styles.container}>
                 <ListaGrupos data={grupos} />
