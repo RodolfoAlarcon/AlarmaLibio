@@ -12,7 +12,7 @@ import {
     Dimensions,
     TouchableOpacity
 } from 'react-native';
-import { Header } from '../../Components/Header';
+import { HeaderDeep } from '../../Components/HeaderDeep';
 import { AuthContex } from '../../context/UsuarioContext'
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +25,7 @@ export const DenunciasScreen = (props: any) => {
     return (
 
         <SafeAreaView>
-            <Header
+            <HeaderDeep
                 titulo="Denuncia"
                 descripcion="SI DESEAS REPORTAR A UN USUARIO POR USO INDEVIDO DEL SERVICIO"
                 icono="DENUNCIA"

@@ -6,14 +6,12 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from '@react-navigation/native';
 
-
-
-export const Header = (props: any) => {
+export const HeaderDeep = (props: any) => {
 
     const titulo = props.titulo
     const icono = props.icono
@@ -70,8 +68,6 @@ export const Header = (props: any) => {
 
     }
 
-
-
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -79,22 +75,25 @@ export const Header = (props: any) => {
                 resizeMode="stretch"
                 style={styles.ImgHeader}
             >
-                {
-                    retroceder == true ?
-                        <View style={{width:"100%", justifyContent:"space-around", alignItems:"center", flexDirection:"row"}}>
-                            <View></View>
-                            <View>
+                
+                    <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center", flexDirection: "row" }}>
+                        <TouchableOpacity style={styles.retroceder}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Image
+                                source={require("../Assets/Img/back-white.png")}
+                                style={{ width: 25, height: 25 }}
+                            />
+                        </TouchableOpacity>
+                        <View>
                             <Text style={styles.titulo}>
                                 {titulo}
                             </Text>
-                            </View>
-                            <View></View>
                         </View>
-                        :
-                        <Text style={styles.titulo}>
-                            {titulo}
-                        </Text>
-                }
+                        <View></View>
+                    </View>
+
+                
                 {
                     handleIcono()
                 }

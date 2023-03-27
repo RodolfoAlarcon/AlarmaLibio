@@ -9,7 +9,7 @@ import {
     View,
     Dimensions
 } from 'react-native';
-import { Header } from '../../../Components/Header';
+import { HeaderDeep } from '../../../Components/HeaderDeep';
 import { ListaVecions } from '../../../Components/ListaVecinos';
 import { AuthContex } from '../../../context/UsuarioContext'
 import apiApp from '../../../api/api'
@@ -42,7 +42,7 @@ export const VecinosScreen = (props:any) => {
     }, [])
     return (
         <SafeAreaView>
-            <Header
+            <HeaderDeep
                 titulo="VECINOS"
                 icono="vecinos"
                 descripcion="ACTIVE EL BOTÓN ACORDE A SU EMERGENCIA

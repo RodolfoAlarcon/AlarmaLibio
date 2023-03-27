@@ -10,7 +10,7 @@ import {
     Dimensions,
     TouchableOpacity
 } from 'react-native';
-import { Header } from '../../../Components/Header';
+import { HeaderDeep } from '../../../Components/HeaderDeep';
 import { Input } from "../../../Components/Input";
 import CheckBox from "@react-native-community/checkbox"
 
@@ -23,7 +23,7 @@ export const Notificacion = () => {
 
     return (
         <SafeAreaView>
-            <Header
+            <HeaderDeep
                 titulo="CONFIGURACIÓN"
                 icono="configuracion"
                 descripcion="EN ESTA LISTA SE ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADAS CON LA ALARMA."

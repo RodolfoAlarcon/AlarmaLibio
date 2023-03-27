@@ -15,7 +15,7 @@ import {
     BackHandler
 
 } from 'react-native';
-import { Header } from '../../../Components/Header';
+import { HeaderDeep } from '../../../Components/HeaderDeep';
 import { ListaHistorial } from '../../../Components/ListaHistorial';
 import { NoFlickerImage } from 'react-native-no-flicker-image';
 import { useNavigation } from '@react-navigation/native';
@@ -53,7 +53,7 @@ export const CamaraScreen = (props: any) => {
     return (
         <ScrollView>
             <SafeAreaView>
-                <Header
+                <HeaderDeep
                     titulo="Camara"
                     descripcion="EN ESTA LISTA ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADOS CON LA ALARMA."
                     retroceder={true}

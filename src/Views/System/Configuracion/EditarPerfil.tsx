@@ -10,14 +10,13 @@ import {
     Dimensions,
     TouchableOpacity
 } from 'react-native';
-import { Header } from '../../../Components/Header';
+import { HeaderDeep } from '../../../Components/HeaderDeep';
 import { Input } from "../../../Components/Input";
 import { Formik } from 'formik';
 import { AuthContex } from '../../../context/UsuarioContext'
 import MultiSelect from 'react-native-multiple-select';
 import { useNavigation } from '@react-navigation/native';
 import apiApp from '../../../api/api'
-import Icon from "react-native-vector-icons/FontAwesome"
 
 export const EditarPerfil = () => {
     const navigator = useNavigation()
@@ -115,7 +114,7 @@ export const EditarPerfil = () => {
 console.log(provinces)
     return (
         <SafeAreaView>
-            <Header
+            <HeaderDeep
                 titulo="CONFIGURACIÓN"
                 icono="configuracion"
                 descripcion="EN ESTA LISTA SE ENCUENTRAN TODAS LAS PERSONAS QUE ESTÁN CONECTADAS CON LA ALARMA."

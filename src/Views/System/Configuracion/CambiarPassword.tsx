@@ -10,7 +10,7 @@ import {
     Dimensions,
     TouchableOpacity
 } from 'react-native';
-import { Header } from '../../../Components/Header';
+import { HeaderDeep } from '../../../Components/HeaderDeep';
 import { Input } from "../../../Components/Input";
 import { AuthContex } from '../../../context/UsuarioContext'
 import { Formik } from 'formik';

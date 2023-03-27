@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    ImageBackground,
+    Image,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -8,7 +8,6 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-import Icon from "react-native-vector-icons/FontAwesome"
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -25,11 +24,14 @@ export const HeaderSelecion = (props: any) => {
 
     return (
         <View style={styles.container}>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('Alarmas' as never)}
-                >
-                    <Icon name="arrow-left" size={20} color="#fff" />
-                </TouchableOpacity>
+             <TouchableOpacity style={{}}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Image
+                                source={require("../Assets/Img/back-white.png")}
+                                style={{ width: 25, height: 25 }}
+                            />
+                        </TouchableOpacity>
                 <Text style={styles.titulo}>
                     {titulo} 
                 </Text>
